@@ -1,50 +1,114 @@
 /******************************************
 Treehouse Techdegree:
+Frank Keane
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
+const theList = document.querySelectorAll("li");
+const perPage = 10;
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
+//function to hide or display 'pages' - sections of 10(perPage) list items
+function showPage(list, section) {
+  const startIndex = section * perPage - perPage;
+  const endIndex = section * perPage - 1;
+  for (let i = 0; i < theList.length; i++) {
+    list[i].style.display = "none";
+  }
 
+  for (let i = 0; i < theList.length; i++) {
+    if (i >= startIndex && i <= endIndex) {
+      list[i].style.display = "block";
+    }
+  }
+}
 
+//function to generate, append, and add functionality to the pagination buttons.
+function appendPageLinks(list) {
+  const pageList = Math.ceil(list.length / perPage);
+  const pageContainer = document.querySelector(".page");
+  const ul = document.createElement("ul");
+  const button = document.createElement("button");
 
+  pageContainer.appendChild(ul);
+  //loop through the list of pages & create a button for each page
+  for (let i = 1; i <= pageList; i++) {
+    const li = document.createElement("li");
+    const button = document.createElement("a");
+    button.href = "#";
+    ul.appendChild(li);
+    li.appendChild(button);
+    button.textContent = i;
+    button.style.margin = "1em";
+    ul.className = "pagination";
+    const initButton = document.querySelector(".pagination a");
+    initButton.className = "active";
 
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
+    // when clicked buttons will clear 'active' style  from the currently active button and add it to new active button.
+    button.addEventListener("click", () => {
+      const errorP = document.querySelector(".error-p");
+      const activeButton = document.querySelector(".active");
+      activeButton.classList.remove("active");
+      event.target.className = "active";
+      showPage(theList, i);
+      errorP.textContent = "";
+    });
+  }
+}
 
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
+//function to add search bar to page
+function searchBar() {
+  //create HTML elements for search bar
+  const searchContainer = document.createElement("div");
+  const searchForm = document.createElement("form");
+  const searchInput = document.createElement("input");
+  const searchBtn = document.createElement("button");
+  //styles
+  searchContainer.style.float = "right";
+  searchBtn.textContent = "Search";
+  searchInput.type = "text";
+  searchInput.placeholder = "Enter student name";
+  searchInput.className = "search-input";
 
+  // add search bar to page
+  const pageHeader = document.querySelector(".page-header");
+  pageHeader.appendChild(searchContainer);
+  searchContainer.appendChild(searchForm);
+  searchForm.appendChild(searchInput);
+  searchContainer.appendChild(searchBtn);
+  searchBtn.textContent = "Search";
+  searchInput.type = "text";
+  searchForm.style.display = "inline";
+  let match = 0;
 
+  //ERROR
+  // create elements for error message and add to page
+  const errorContainer = document.createElement("div");
+  const errorP = document.createElement("p");
+  pageHeader.appendChild(errorContainer);
+  errorContainer.appendChild(errorP);
+  errorContainer.style.textAlign = "center";
+  errorP.style.color = "#4ba6c3";
+  errorP.className = "error-p";
 
+  // add search function to button
+  searchBtn.addEventListener("click", () => {
+    let searchTerm = searchInput.value;
+    // loop through student details and compare search input to student names
+    for (let i = 0; i < theList.length; i++) {
+      let studentH3 = document.getElementsByTagName("H3")[i];
+      let studentText = studentH3.textContent;
+      theList[i].style.display = "none";
+      if (searchTerm == studentText) {
+        theList[i].style.display = "block";
+        match = 1;
+      } //if
+    } //for
+    if (match == 0) {
+      errorP.textContent = "Sorry, no results have been found.";
+    }
+  }); //listener
+} //searchbar
 
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
-
-
-
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+showPage(theList, 1);
+appendPageLinks(theList);
+searchBar();
