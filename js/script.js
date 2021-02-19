@@ -28,9 +28,9 @@ function appendPageLinks(list) {
 
   const ul = document.createElement("ul");
   const button = document.createElement("button");
-
   pageContainer.appendChild(ul);
-  //loop through the list of pages & create a button for each page
+  //loop through the list of pages & create a button for each page unless there is only 1 page to display
+  console.log(pageList);
   for (let i = 1; i <= pageList; i++) {
     const li = document.createElement("li");
     const button = document.createElement("a");
@@ -115,7 +115,9 @@ function searchBar() {
       errorP.textContent = "Sorry, no results have been found.";
     }
     pageContainer.removeChild(paginationList);
-    appendPageLinks(searchArray);
+    if (pageList > 1) {
+      appendPageLinks(searchArray);
+    }
   }); //listener
 } //searchBar()
 
