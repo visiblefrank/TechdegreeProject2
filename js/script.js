@@ -6,7 +6,7 @@ FSJS project 2 - List Filter and Pagination
 
 const theList = document.querySelectorAll("li");
 const perPage = 10;
-
+const pageContainer = document.querySelector(".page"); //this variable global so searchBar and appendPageLinks can see it
 //function to hide or display 'pages' - sections of 10(perPage) list items
 function showPage(list, section) {
   const startIndex = section * perPage - perPage;
@@ -25,7 +25,7 @@ function showPage(list, section) {
 //function to generate, append, and add functionality to the pagination buttons.
 function appendPageLinks(list) {
   const pageList = Math.ceil(list.length / perPage);
-  const pageContainer = document.querySelector(".page");
+
   const ul = document.createElement("ul");
   const button = document.createElement("button");
 
@@ -89,25 +89,35 @@ function searchBar() {
   errorContainer.style.textAlign = "center";
   errorP.style.color = "#4ba6c3";
   errorP.className = "error-p";
-
+  //create an array including all student names
+  studentArray = [];
+  searchArray = [];
+  let studentNames = document.getElementsByTagName("H3");
+  for (let i = 0; i < studentNames.length; i++) {
+    var currentName = studentNames[i];
+    studentArray.push(currentName.textContent);
+  }
   // add search function to button
   searchBtn.addEventListener("click", () => {
     let searchTerm = searchInput.value;
+    let pageDiv = document.getElementsByClassName("page");
+    let paginationList = document.querySelector(".pagination");
     // loop through student details and compare search input to student names
     for (let i = 0; i < theList.length; i++) {
-      let studentH3 = document.getElementsByTagName("H3")[i];
-      let studentText = studentH3.textContent;
       theList[i].style.display = "none";
-      if (searchTerm == studentText) {
+      if (studentArray[i].includes(searchTerm)) {
         theList[i].style.display = "block";
+        searchArray.push(studentArray[i]);
         match = 1;
       } //if
     } //for
     if (match == 0) {
       errorP.textContent = "Sorry, no results have been found.";
     }
+    pageContainer.removeChild(paginationList);
+    appendPageLinks(searchArray);
   }); //listener
-} //searchbar
+} //searchBar()
 
 showPage(theList, 1);
 appendPageLinks(theList);
