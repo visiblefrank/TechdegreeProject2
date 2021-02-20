@@ -4,7 +4,7 @@ Frank Keane
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-const theList = document.querySelectorAll("li");
+let theList = document.querySelectorAll("li");
 const perPage = 10;
 const pageContainer = document.querySelector(".page"); //this variable global so searchBar and appendPageLinks can see it
 //function to hide or display 'pages' - sections of 10(perPage) list items
@@ -14,7 +14,6 @@ function showPage(list, section) {
   for (let i = 0; i < theList.length; i++) {
     list[i].style.display = "none";
   }
-
   for (let i = 0; i < theList.length; i++) {
     if (i >= startIndex && i <= endIndex) {
       list[i].style.display = "block";
@@ -25,7 +24,6 @@ function showPage(list, section) {
 //function to generate, append, and add functionality to the pagination buttons.
 function appendPageLinks(list) {
   const pageList = Math.ceil(list.length / perPage);
-
   const ul = document.createElement("ul");
   const button = document.createElement("button");
   pageContainer.appendChild(ul);
@@ -42,8 +40,7 @@ function appendPageLinks(list) {
     ul.className = "pagination";
     const initButton = document.querySelector(".pagination a");
     initButton.className = "active";
-
-    // when clicked buttons will clear 'active' style  from the currently active button and add it to new active button.
+    // when clicked, buttons will clear 'active' style  from the currently active button and add it to new active button.
     button.addEventListener("click", () => {
       const errorP = document.querySelector(".error-p");
       const activeButton = document.querySelector(".active");
@@ -115,9 +112,7 @@ function searchBar() {
       errorP.textContent = "Sorry, no results have been found.";
     }
     pageContainer.removeChild(paginationList);
-    if (pageList > 1) {
-      appendPageLinks(searchArray);
-    }
+    appendPageLinks(searchArray);
   }); //listener
 } //searchBar()
 
