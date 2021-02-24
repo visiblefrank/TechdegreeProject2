@@ -6,16 +6,16 @@ FSJS project 2 - List Filter and Pagination
 
 let theList = document.querySelectorAll("li");
 let searchArray = [];
-const perPage = 10;
+const perPage = 9;
 const pageContainer = document.querySelector(".page"); //this variable global so searchBar and appendPageLinks can see it
 //function to hide or display 'pages' - sections of 10(perPage) list items
 function showPage(list, section) {
   const startIndex = section * perPage - perPage;
-  const endIndex = section * perPage - 1;
-  for (let i = 0; i < theList.length; i++) {
+  const endIndex = section * perPage;
+  for (let i = 0; i < list.length; i++) {
     list[i].style.display = "none";
   }
-  for (let i = 0; i < theList.length; i++) {
+  for (let i = 0; i <= list.length; i++) {
     if (i >= startIndex && i <= endIndex) {
       list[i].style.display = "block";
     }
@@ -103,16 +103,15 @@ function searchBar() {
     // loop through student details and compare search input to student names
     for (let i = 0; i < theList.length; i++) {
       if (studentArray[i].includes(searchTerm)) {
-        console.log(theList[i]);
-        console.log(searchArray);
         searchArray.push(theList[i]);
-        console.log(theList[i]);
+        console.log(theList);
         console.log(searchArray);
         match = 1;
         //console.log(theList[i]);
       } //if
       //console.log(studentH3[i]);
     } //for
+
     showPage(searchArray, 1);
     if (match == 0) {
       errorP.textContent = "Sorry, no results have been found.";
