@@ -11,10 +11,11 @@ const pageContainer = document.querySelector(".page"); //this variable global so
 function showPage(list, section) {
   const startIndex = section * perPage - perPage;
   const endIndex = section * perPage - 1;
-  for (let i = 0; i < theList.length; i++) {
+  //
+  for (let i = 0; i < list.length; i++) {
     list[i].style.display = "none";
-  }
-  for (let i = 0; i < theList.length; i++) {
+
+  for (let i = 0; i < list.length; i++) {
     if (i >= startIndex && i <= endIndex) {
       list[i].style.display = "block";
     }
