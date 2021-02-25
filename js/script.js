@@ -10,13 +10,13 @@ const perPage = 9;
 const pageContainer = document.querySelector(".page"); //this variable global so searchBar and appendPageLinks can see it
 //function to hide or display 'pages' - sections of 10(perPage) list items
 function showPage(list, section) {
-  console.log(list);
+  //console.log(list);
   const startIndex = section * perPage - perPage;
   const endIndex = section * perPage;
-  for (let i = 0; i < list.length; i++) {
-    list[i].style.display = "none";
+  for (let i = 0; i < theList.length; i++) {
+    theList[i].style.display = "none";
   }
-  for (let i = 0; i <= list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     if (i >= startIndex && i <= endIndex) {
       list[i].style.display = "block";
     }
@@ -99,6 +99,7 @@ function searchBar() {
   // add search function to button
   searchBtn.addEventListener("click", () => {
     let searchTerm = searchInput.value;
+    searchArray = [];
     // let pageDiv = document.getElementsByClassName("page");
     // let paginationList = document.querySelector(".pagination");
     // loop through student details and compare search input to student names
@@ -107,9 +108,11 @@ function searchBar() {
         searchArray.push(theList[i]);
         console.log(theList[i]);
         console.log(searchArray[i]);
+        console.log(searchArray);
         match = 1;
       } //if
     } //for
+    console.log(theList);
     console.log(searchArray);
     showPage(searchArray, 1);
     if (match == 0) {
