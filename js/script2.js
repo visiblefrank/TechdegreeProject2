@@ -7,31 +7,42 @@ FSJS project 2 - List Filter and Pagination
 let theList = document.querySelectorAll("li");
 let searchArray = [];
 const perPage = 9;
-const pageContainer = document.querySelector(".page");
+const pageContainer = document.querySelector(".page"); //this variable is global so searchBar and appendPageLinks can see it
 const errorP = document.createElement("p");
 //function to hide or display 'pages' - sections of 10(perPage) list items
 function showPage(list, section) {
-  let startIndex = section * perPage - perPage + (section - 1); // -1 to level index(starts at 0) and section number (starts at 1)
-  let endIndex = section * perPage + (section - 1) ;
-  let pageList = Math.ceil(list.length / perPage); 
+  let startIndex = section * perPage - perPage;
+  let endIndex = section * perPage;
+
   //reset li styles
   for (let i = 0; i < theList.length; i++) {
     theList[i].style.display = "none";
   }//for
-    for (let i = 0; i <= list.length - 1; i++) { // -1 so it doesn't go out of bounds and cause undefined
-        if (i >= startIndex && i <= endIndex) {
-          list[i].style.display = "block"
-        } //if
-    } //for
+ 
+  for (let i = 0; i <= list.length -1; i++) {
+    if (section == 1) {
+      if (i >= startIndex && i <= endIndex) {
+        console.log(i);
+        console.log(searchArray);
+        list[i].style.display = "block";
+      } //if
+    } else {
+      if (i >= startIndex + 1 && i <= endIndex + 1) {
+        list[i].style.display = "block";
+      } //if
+    } //else if
+  } //for
 }//showPage
 
 //function to generate, append, and add functionality to the pagination buttons.
 function appendPageLinks(list) { 
-  let pageList = Math.ceil(list.length / perPage); 
+  const pageList = Math.ceil(list.length / perPage); 
+  //console.log(pageList);
   let ul = document.createElement("ul");
   ul.className = "pagination";
   pageContainer.appendChild(ul);
-  //loop through the list of pages & create a button for each page unless there is only 1 page to display
+
+  //loop through the list of pages & create a button for each page
   for (let i = 1; i <= pageList; i++) {
     let li = document.createElement("li");
     var button = document.createElement("a");
@@ -57,7 +68,11 @@ function appendPageLinks(list) {
     let initButton = document.getElementsByTagName("a")[0]; 
     initButton.className = "active";
   }//for
+  // theList.length = 0; //reset after being filled with searchArray value
+  // theList = document.querySelectorAll(".student-item"); //repopulate
+  //console.log(theList);
 }//appendPageLinks
+
 
 //function to add search bar to page
 function searchBar() {
@@ -81,6 +96,7 @@ function searchBar() {
   searchBtn.textContent = "Search";
   searchInput.type = "text";
   searchForm.style.display = "inline";
+  
   //ERROR
   // create elements for error message and add to page
   const errorContainer = document.createElement("div");
@@ -98,28 +114,34 @@ function searchBar() {
     currentName = studentH3[i];
     studentArray.push(currentName.textContent);
   }
+console.log(studentArray);
+  //let paginationList = document.querySelector(".pagination");
   // add search function to button
-  searchBtn.addEventListener("click", () => {
-    let searchTerm = searchInput.value;
-    searchArray = []; //reset
-    // loop through student details and compare search input to student names
-    for (let i = 0; i < theList.length; i++) {
-      if (studentArray[i].includes(searchTerm)) {
-        searchArray.push(theList[i]);
-        match = 1;
-        errorP.textContent = "";
-      } //if
-    } //for
-    if (match == 0) {
-      errorP.textContent = "Sorry, no results have been found.";
-    } 
-    else {
-      showPage(searchArray, 1);
-      let ulSearch = document.querySelector(".pagination");
-      document.querySelector(".page").removeChild(ulSearch);
-      appendPageLinks(searchArray);
-      searchInput.value = "";
-    }
+    searchBtn.addEventListener("click", () => {
+      let searchTerm = searchInput.value;
+      searchArray = []; //reset
+      // loop through student details and compare search input to student names
+      for (let i = 0; i < theList.length; i++) {
+        //console.log(studentArray[i]);
+        if (studentArray[i].includes(searchTerm)) {
+          searchArray.push(theList[i]);
+          match = 1;
+          errorP.textContent = "";
+        } //if
+      } //for
+      console.log(searchArray);
+      if (match == 0) {
+        errorP.textContent = "Sorry, no results have been found.";
+      }
+      else {
+        showPage(searchArray, 1);
+        console.log(searchArray);
+        let ulSearch = document.querySelector(".pagination");
+        document.querySelector(".page").removeChild(ulSearch);
+        appendPageLinks(searchArray);
+        searchInput.value = "";
+      }
+      console.log(searchArray);
   }); //listener
 } //searchBar()
 
